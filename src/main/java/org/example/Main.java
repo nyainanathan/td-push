@@ -7,20 +7,22 @@ import java.util.List;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) throws SQLException {
+
         DataRetriever  dataRetriever = new DataRetriever();
+
 //        List<InvoiceTotal> tota = dataRetriever.findConfirmedAndPaidInvoiceTotals();
 //        for (InvoiceTotal invoiceTotal : tota) {
 //            System.out.println(invoiceTotal);
 //        }
-
+//
 //        System.out.println(dataRetriever.computeStatusTotals());
-
+//
 //        System.out.println(dataRetriever.computeWeightedTurnover());
-
+//
 //        System.out.println(dataRetriever.findInvoiceTaxSummaries());
+//
+//        System.out.println(dataRetriever.computeWeightedTurnoverTtc());
 
-        System.out.println(dataRetriever.computeWeightedTurnoverTtc());
     }
-
 
 }

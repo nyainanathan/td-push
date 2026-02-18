@@ -20,9 +20,11 @@ public class DataRetriever {
                 GROUP BY i.id, i.customer_name
                 ORDER BY i.id;
                 """;
-        try(Connection conn = new DBConnection().getConnection()){
-            PreparedStatement stmt = conn.prepareStatement(query);
-            ResultSet rs = stmt.executeQuery();
+        try(
+                Connection conn = new DBConnection().getConnection();
+                PreparedStatement stmt = conn.prepareStatement(query);
+                ResultSet rs = stmt.executeQuery()
+        ){
             while(rs.next()){
                 InvoiceTotal invoiceTotal = new InvoiceTotal();
                 invoiceTotal.setInvoiceId(rs.getInt("id"));
@@ -47,9 +49,11 @@ public class DataRetriever {
         WHERE i.status = 'CONFIRMED' OR i.status = 'PAID'
         GROUP BY i.status, i.customer_name, i.id;
                 """;
-        try(Connection conn = new DBConnection().getConnection()){
+        try(
+            Connection conn = new DBConnection().getConnection();
             PreparedStatement stmt = conn.prepareStatement(query);
             ResultSet rs = stmt.executeQuery();
+        ){
             while(rs.next()){
                 InvoiceTotal invoiceTotal = new InvoiceTotal();
                 invoiceTotal.setInvoiceId(rs.getInt("id"));
@@ -73,11 +77,12 @@ public class DataRetriever {
                 JOIN invoice_line il ON i.id = il.invoice_id
                 GROUP BY i.status;
                 """;
-        try(Connection conn = new DBConnection().getConnection()) {
+        try(
+                Connection conn = new DBConnection().getConnection();
+                PreparedStatement ps = conn.prepareStatement(query);
+                ResultSet rs = ps.executeQuery();
+        ) {
 
-            PreparedStatement ps = conn.prepareStatement(query);
-
-            ResultSet rs = ps.executeQuery();
 
             while(rs.next()){
 
@@ -116,10 +121,12 @@ public class DataRetriever {
                 JOIN invoice_line il ON i.id = il.invoice_id;
                 """;
 
-        try(Connection conn = new DBConnection().getConnection()){
-            PreparedStatement ps = conn.prepareStatement(query);
+        try(
+                Connection conn = new DBConnection().getConnection();
+                PreparedStatement ps = conn.prepareStatement(query);
+                ResultSet rs = ps.executeQuery();
+        ){
 
-            ResultSet rs = ps.executeQuery();
 
             if(rs.next()){
                 total = rs.getDouble("chiffre_d_affaire");
@@ -145,9 +152,11 @@ public class DataRetriever {
                 ORDER BY i.id;
                 """;
 
-        try(Connection conn = new DBConnection().getConnection()) {
-            PreparedStatement ps = conn.prepareStatement(query);
-            ResultSet rs = ps.executeQuery();
+        try(
+                Connection conn = new DBConnection().getConnection();
+                PreparedStatement ps = conn.prepareStatement(query);
+                ResultSet rs = ps.executeQuery();
+        ) {
             while(rs.next()){
                 InvoiceTaxSummary invoiceTaxSummary = new InvoiceTaxSummary();
                 invoiceTaxSummary.setId(rs.getInt("id"));
@@ -180,9 +189,11 @@ public class DataRetriever {
                 GROUP BY  t.rate
                 """;
 
-        try(Connection conn = new DBConnection().getConnection()){
-            PreparedStatement ps = conn.prepareStatement(query);
-            ResultSet rs = ps.executeQuery();
+        try(
+                Connection conn = new DBConnection().getConnection();
+                PreparedStatement ps = conn.prepareStatement(query);
+                ResultSet rs = ps.executeQuery();
+        ){
             if(rs.next()){
                 total = rs.getBigDecimal("chiffre_d_affaire_TTC");
             }
