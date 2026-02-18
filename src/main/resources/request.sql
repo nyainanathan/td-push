@@ -20,7 +20,7 @@ SELECT SUM(
        ELSE 0
     END
 ) AS chiffre_d_affaire FROM invoice i
-JOIN invoice_line il ON i.id = il.invoice_id
+JOIN invoice_line il ON i.id = il.invoice_id;
 
 CREATE TABLE tax_config (
                             id SERIAL PRIMARY KEY,
@@ -29,7 +29,7 @@ CREATE TABLE tax_config (
 );
 
 INSERT INTO tax_config (id, label, rate) VALUES
-    (1, 'TVA STANDARD', 20)
+    (1, 'TVA STANDARD', 20);
 
 SELECT * FROM tax_config;
 
