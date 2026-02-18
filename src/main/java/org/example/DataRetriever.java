@@ -64,4 +64,40 @@ public class DataRetriever {
         return invoiceTotals;
 
     }
+    InvoiceStatusTotals computeStatusTotals(){
+        InvoiceStatusTotals total  = new InvoiceStatusTotals();
+
+        String query = """
+                SELECT  i.status, SUM(il.quantity * il.unit_price) AS AMOUNT FROM invoice i
+                JOIN invoice_line il ON i.id = il.invoice_id
+                GROUP BY i.status;
+                """;
+        try(Connection conn = new DBConnection().getConnection()) {
+
+            PreparedStatement ps = conn.prepareStatement(query);
+
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()){
+
+                if(rs.getString("status").equals("CONFIRMED")){
+
+                    total.setTotalConfirmed(rs.getDouble("amount"));
+
+                } else if (rs.getString("status").equals("PAID")){
+
+                    total.setTotalPaid(rs.getDouble("amount"));
+
+                } else if (rs.getString("status").equals("DRAFT")){
+
+                    total.setTotalDraft(rs.getDouble("amount"));
+
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return total;
+    };
 }

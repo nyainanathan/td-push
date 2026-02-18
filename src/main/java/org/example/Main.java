@@ -8,9 +8,11 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) throws SQLException {
         DataRetriever  dataRetriever = new DataRetriever();
-        List<InvoiceTotal> tota = dataRetriever.findConfirmedAndPaidInvoiceTotals();
-        for (InvoiceTotal invoiceTotal : tota) {
-            System.out.println(invoiceTotal);
-        }
+//        List<InvoiceTotal> tota = dataRetriever.findConfirmedAndPaidInvoiceTotals();
+//        for (InvoiceTotal invoiceTotal : tota) {
+//            System.out.println(invoiceTotal);
+//        }
+
+        System.out.println(dataRetriever.computeStatusTotals());
     }
 }
