@@ -100,4 +100,31 @@ public class DataRetriever {
 
         return total;
     };
+
+    Double computeWeightedTurnover() throws SQLException {
+        Double total = 0d;
+
+        String query = """
+                SELECT SUM(
+                    CASE
+                        WHEN i.status = 'PAID' THEN  il.quantity * il.unit_price
+                       WHEN i.status = 'CONFIRMED' THEN (il.quantity * il.unit_price) / 2
+                       ELSE 0
+                    END
+                ) AS chiffre_d_affaire FROM invoice i
+                JOIN invoice_line il ON i.id = il.invoice_id;
+                """;
+
+        try(Connection conn = new DBConnection().getConnection()){
+            PreparedStatement ps = conn.prepareStatement(query);
+
+            ResultSet rs = ps.executeQuery();
+
+            if(rs.next()){
+                total = rs.getDouble("chiffre_d_affaire");
+            }
+           }
+
+        return total;
+    }
 }
