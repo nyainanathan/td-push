@@ -1,5 +1,6 @@
 package org.example;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -159,4 +160,34 @@ public class DataRetriever {
 
         return invoiceTaxSummaries;
     };
+
+    BigDecimal computeWeightedTurnoverTtc() throws SQLException {
+
+        BigDecimal total = BigDecimal.ZERO;
+
+        String query = """
+                SELECT SUM (
+                    CASE
+                            WHEN i.status = 'PAID' THEN (il.quantity * il.unit_price) + (( t.rate * (il.quantity * il.unit_price) ) / 100)
+                            WHEN i.status = 'CONFIRMED' THEN  ((il.quantity * il.unit_price) + (( t.rate * (il.quantity * il.unit_price) ) / 100) ) / 2
+                            ELSE 0
+                       END
+                       ) AS chiffre_d_affaire_TTC
+                FROM invoice i
+                         JOIN invoice_line il ON i.id = il.invoice_id
+                         JOIN tax_config t ON 1 = 1
+                WHERE i.status != 'DRAFT'
+                GROUP BY  t.rate
+                """;
+
+        try(Connection conn = new DBConnection().getConnection()){
+            PreparedStatement ps = conn.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                total = rs.getBigDecimal("chiffre_d_affaire_TTC");
+            }
+        }
+
+        return total;
+    }
 }
