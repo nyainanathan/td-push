@@ -23,7 +23,7 @@ SELECT SUM(
     CASE
         WHEN i.status = 'PAID' THEN  il.quantity * il.unit_price
        WHEN i.status = 'CONFIRMED' THEN (il.quantity * il.unit_price) / 2
-       ELSE 0
+        WHEN i.status = 'DRAFT' THEN (il.quantity * il.unit_price) * 0
     END
 ) AS chiffre_d_affaire FROM invoice i
 JOIN invoice_line il ON i.id = il.invoice_id;
