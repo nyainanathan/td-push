@@ -12,6 +12,12 @@ SELECT  i.status, SUM(il.quantity * il.unit_price) FROM invoice i
 JOIN invoice_line il ON i.id = il.invoice_id
 GROUP BY i.status;
 
+SELECT SUM((case when i.status = 'PAID' THEN il.quantity * il.unit_price else 0 end)) as paid_amount,
+       SUM((case when i.status = 'CONFIRMED' THEN il.quantity * il.unit_price else 0 end)) as confirmed_amount,
+       SUM((case when i.status = 'DRAFT' THEN il.quantity * il.unit_price else 0 end)) as draft_amount
+FROM invoice i
+JOIN invoice_line il ON i.id = il.invoice_id;
+
 
 SELECT SUM(
     CASE

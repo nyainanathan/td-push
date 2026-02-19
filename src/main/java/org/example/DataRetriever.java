@@ -73,9 +73,11 @@ public class DataRetriever {
         InvoiceStatusTotals total  = new InvoiceStatusTotals();
 
         String query = """
-                SELECT  i.status, SUM(il.quantity * il.unit_price) AS AMOUNT FROM invoice i
-                JOIN invoice_line il ON i.id = il.invoice_id
-                GROUP BY i.status;
+                SELECT SUM((case when i.status = 'PAID' THEN il.quantity * il.unit_price else 0 end)) as paid_amount,
+                       SUM((case when i.status = 'CONFIRMED' THEN il.quantity * il.unit_price else 0 end)) as confirmed_amount,
+                       SUM((case when i.status = 'DRAFT' THEN il.quantity * il.unit_price else 0 end)) as draft_amount
+                FROM invoice i
+                JOIN invoice_line il ON i.id = il.invoice_id;
                 """;
         try(
                 Connection conn = new DBConnection().getConnection();
@@ -86,19 +88,14 @@ public class DataRetriever {
 
             while(rs.next()){
 
-                if(rs.getString("status").equals("CONFIRMED")){
+                    total.setTotalConfirmed(rs.getDouble("confirmed_amount"));
 
-                    total.setTotalConfirmed(rs.getDouble("amount"));
 
-                } else if (rs.getString("status").equals("PAID")){
+                    total.setTotalPaid(rs.getDouble("paid_amount"));
 
-                    total.setTotalPaid(rs.getDouble("amount"));
 
-                } else if (rs.getString("status").equals("DRAFT")){
+                    total.setTotalDraft(rs.getDouble("draft_amount"));
 
-                    total.setTotalDraft(rs.getDouble("amount"));
-
-                }
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

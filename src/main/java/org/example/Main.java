@@ -15,7 +15,7 @@ public class Main {
 //            System.out.println(invoiceTotal);
 //        }
 //
-//        System.out.println(dataRetriever.computeStatusTotals());
+        System.out.println(dataRetriever.computeStatusTotals());
 //
 //        System.out.println(dataRetriever.computeWeightedTurnover());
 //
